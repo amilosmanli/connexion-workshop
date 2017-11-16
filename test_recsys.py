@@ -59,8 +59,11 @@ def get_recommendations(user_id, num_of_movies=10):
 
 
 if __name__ == '__main__':
-    # create_rating_matrix()
-    # create_similarity_matrix(672, 'cosine', K=100)
-    # get_similarity('Star Wars: Episode VI - Return of the Jedi (1983)', 'cosine')
-    # get_recommendations(672)
+    create_rating_matrix()
+    create_similarity_matrix(672, 'cosine', K=100)
+    movie_title = 'Star Wars: Episode VI - Return of the Jedi (1983)'
+    print("Similar movies to %s" % movie_title)
+    print(get_similarity(movie_title, 'cosine'))
+    print("Recommendations for user %s" 672)
+    print(get_recommendations(672))
     print("Test recommendations")
