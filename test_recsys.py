@@ -3,7 +3,6 @@ import pandas as pd
 from recsys import utils, recommenders, similarity
 
 dataset_folder = os.path.join(os.getcwd(), 'data')
-rating_matrices_folder = os.path.join(dataset_folder, 'rating_matrices')
 similarity_matrices_folder = os.path.join(dataset_folder, 'similarity_matrices')
 ratings_folder = os.path.join(dataset_folder, 'ratings')
 
@@ -32,7 +31,8 @@ def create_rating_matrix():
 def create_similarity_matrix(user_id, similarity_metric, K=10):
     ratings, my_customer_number = utils.merge_datasets(dataset_folder, user_id)
     ratings.to_pickle(os.path.join(ratings_folder, str(user_id)))
-    ratings_matrix = pd.read_pickle(os.path.join(rating_matrices_folder, str(user_id)))
+    ratings_matrix = ratings.pivot_table(index='customer', columns='movie',
+                                         values='rating', fill_value=0)
     neighbours = similarity.compute_nearest_neighbours(user_id,
                                                        ratings_matrix,
                                                        similarity_metric)[1:K+1]
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     create_similarity_matrix(672, 'cosine', K=100)
     movie_title = 'Star Wars: Episode VI - Return of the Jedi (1983)'
     print("Similar movies to %s" % movie_title)
-    print(get_similarity(movie_title, 'cosine'))
+    print(get_similarity(movie_title, 'cosine')[0:10])
     print("Recommendations for user %s" % 672)
     print(get_recommendations(672))
     print("Test recommendations")
